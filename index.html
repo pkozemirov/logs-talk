@@ -1,0 +1,370 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Logs talk</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/black.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="src/favicon.png">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="css/monokai.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+</head>
+
+<style>
+  img.small {
+    max-height: 400px !important;
+  }
+
+  .no-border {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .white-border {
+    border: 25px solid #fff !important;
+  }
+
+  .main-bg {
+    width: 100%;
+    height: 100%;
+    transform: scale(1.25);
+  }
+
+  .main-title {
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    padding: 25px;
+    padding-bottom: 0;
+    font-size: 80px !important;
+  }
+
+  .qr {
+    position: absolute;
+    right: 10%;
+    top:10%;
+    width: 25%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .small-text {
+    font-size: 28px;
+  }
+</style>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- Intro -->
+      <section>
+        <img class="no-border main-bg" src="src/bg.jpg" />
+        <img class="qr" src="src/qr.png" />
+      </section>
+
+      <!-- Logs -->
+      <section>
+        <section>
+          <h2>Логи</h2>
+          <p>Записи о событиях в приложении</p>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs javascript">
+    function foo () {
+        console.log('foo called')
+        // ...
+    }
+						</code>
+					</pre>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs javascript">
+    try {
+      // ...
+    } catch (error) {
+      console.error(error)
+    }
+						</code>
+					</pre>
+        </section>
+        <section>
+          <img class="white-border" src="src/transaction-log.png" />
+        </section>
+        <section>
+          <img src="src/human-readable-logs.png" />
+        </section>
+        <section>
+          <p>Зачем они нужны?</p>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs javascript" data-trim data-line-numbers>
+    function sum (a, b) {
+      return a + b
+    }
+						</code>
+					</pre>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs javascript" data-trim data-line-numbers>
+    function sum (a, b) {
+      console.log(`Trying to sum ${a} and ${b}...`)
+      const result = a + b
+      console.log(`The sum of ${a} and ${b} is ${result}`)
+      return result
+    }
+						</code>
+					</pre>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs javascript" data-trim data-line-numbers>
+    // the function that returns sum of given arguments
+    function sum (a, b) {
+      // Here we log a and b arguments
+      console.log(`Trying to sum ${a} and ${b}...`)
+      // Calculating the result
+      const result = a + b
+      // Logging the result
+      console.log(`The sum of ${a} and ${b} is ${result}`)
+      // Returning the result
+      return result
+    }
+						</code>
+					</pre>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs javascript" data-trim data-line-numbers>
+    // the function that returns sum of given arguments
+    function sum (a, b) {
+      // Catching the error
+      try {
+        // Here we log a and b arguments
+        console.log(`Trying to sum ${a} and ${b}...`)
+        // Catching the error
+        try {
+          // Calculating the result
+          const result = a + b
+        } catch (error) {
+          // Throwing error that will be catched later
+          throw new Error(
+            `The calculation did not succeed:`,
+            error.message
+          )
+        }
+        // Logging the result
+        console.log(`The sum of ${a} and ${b} is ${result}`)
+        // Returning the result
+        return result
+      } catch (error) {
+        // Logging the error
+        console.error(error)
+      }
+    }
+						</code>
+					</pre>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs bash" data-trim data-line-numbers>
+  172.17.0.1 - - [14/Apr/2020:06:23:10 +0000] "GET / HTTP/1.1" 200 6144 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36" "-"
+  172.17.0.1 - - [14/Apr/2020:06:23:10 +0000] "GET /css/reset.css HTTP/1.1" 200 871 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36" "-"
+  172.17.0.1 - - [14/Apr/2020:06:23:10 +0000] "GET /css/reveal.css HTTP/1.1" 200 56976 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36" "-"
+  172.17.0.1 - - [14/Apr/2020:06:23:10 +0000] "GET /lib/css/monokai.css HTTP/1.1" 200 940 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36" "-"
+  172.17.0.1 - - [14/Apr/2020:06:23:10 +0000] "GET /css/theme/black.css HTTP/1.1" 200 5834 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36" "-"
+  172.17.0.1 - - [14/Apr/2020:06:23:10 +0000] "GET /src/logo2019msk.svg HTTP/1.1" 200 6385 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36" "-"
+            </code>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs bash" data-trim data-line-numbers>
+  Started initializing app
+  Trying to connect to database
+  Successfully connected database
+  Listening on port 8080
+  New user connected
+  Initializing user session
+  User session successfully initialized
+  Setting user cookie
+  Got error setting user cookie
+  New user connected
+  Initializing user session
+  User session successfully initialized
+  Successfully setup user cookie
+            </code>
+        </section>
+        <section>
+          <pre>
+						<code class="hljs bash" data-trim data-line-numbers="9">
+  Started initializing app
+  Trying to connect to database
+  Successfully connected database
+  Listening on port 8080
+  New user connected
+  Initializing user session
+  User session successfully initialized
+  Setting user cookie
+  Got error setting user cookie
+  New user connected
+  Initializing user session
+  User session successfully initialized
+  Successfully setup user cookie
+            </code>
+        </section>
+        <section>
+          <p>Let's code</p>
+        </section>
+        <section>
+          <p>Обработка логов за пределами бизнес-логики:</p>
+          <ul>
+            <li class="fragment" data-fragment-index="0">Централизованно</li>
+            <li class="fragment" data-fragment-index="1">Переиспользуемо</li>
+            <li class="fragment" data-fragment-index="2">Расширяемо</li>
+          </ul>
+        </section>
+        <section>
+          <img src="src/elk.png" />
+        </section>
+        <section>
+          <h3>Logstash</h3>
+          <img class="no-border small" src="src/logstash.png" />
+        </section>
+      </section>
+
+      <!-- Tracing -->
+      <section>
+        <section>
+          <h2>Трейсы</h2>
+          <p>Логи конкретного запроса</p>
+        </section>
+        <section>
+          <img src="src/microservices.png" />
+        </section>
+        <section>
+          <img src="src/microservices-trace-id.png" />
+        </section>
+        <section>
+          <img class="no-border small" src="src/opentracing.png" />
+        </section>
+        <section>
+          <img class="white-border" src="src/jaeger.png" />
+        </section>
+        <section>
+          <p>Let's code</p>
+        </section>
+        <section>
+          <img src="src/trace-example.png" />
+        </section>
+      </section>
+
+      <!-- Monitoring -->
+      <section>
+        <section>
+          <h2>Метрики</h2>
+          <p>Набор измеряемых значений в динамике</p>
+        </section>
+        <section>
+          <p>Что можно измерять?</p>
+          <ul>
+            <li class="fragment" data-fragment-index="0">Технические метрики</li>
+            <li class="fragment" data-fragment-index="1">Бизнес-метрики</li>
+          </ul>
+        </section>
+        <section>
+          <p>Измерили - и что дальше?</p>
+          <ul>
+            <li class="fragment" data-fragment-index="0">Дебажить</li>
+            <li class="fragment" data-fragment-index="1">Принимать решения</li>
+            <li class="fragment" data-fragment-index="2">You name it</li>
+          </ul>
+        </section>
+        <section>
+          <img src="src/prometheus.png" />
+        </section>
+        <section>
+          <img src="src/charts.png" />
+        </section>
+        <section>
+          <p>Let's code</p>
+        </section>
+      </section>
+
+      <!-- Summary -->
+      <section>
+        <p>Итого:</p>
+        <ul>
+          <li class="fragment" data-fragment-index="0">Логи стоит форматировать, а также обрабатывать централизованно</li>
+          <li class="fragment" data-fragment-index="1">Трейсы помогут отследить и визуализировать конкретный запрос</li>
+          <li class="fragment" data-fragment-index="2">Важно измерять технические и бизнес-метрики, чтобы понимать, куда дальше двигаться</li>
+        </ul>
+      </section>
+
+      <!-- Links -->
+      <section>
+        <p>Ссылки:</p>
+        <ul class='small-text'>
+          <li><a target="_blank" href="https://github.com/pkozemirov/logs-talk-code">https://github.com/pkozemirov/logs-talk-code</a> - Примеры кода</li>
+          <li><a target="_blank" href="https://www.elastic.co/what-is/elk-stack">https://www.elastic.co/what-is/elk-stack</a> - What is the ELK Stack?</li>
+          <li><a target="_blank" href="https://opentracing.io/">https://opentracing.io/</a> - Стандарт OpenTracing</li>
+          <li><a target="_blank" href="https://www.jaegertracing.io/">https://www.jaegertracing.io/</a> - Jaeger</li>
+          <li><a target="_blank" href="https://prometheus.io/">https://prometheus.io/</a> - Prometheus</li>
+        </ul>
+      </section>
+
+      <!-- Outro -->
+      <section>
+        <p>Спасибо!</p>
+        <img src="src/qr.png" />
+      </section>
+    </div>
+  </div>
+
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+      dependencies: [{
+          src: 'plugin/markdown/marked.js'
+        },
+        {
+          src: 'plugin/markdown/markdown.js'
+        },
+        {
+          src: 'plugin/notes/notes.js',
+          async: true
+        },
+        {
+          src: 'plugin/highlight/highlight.js',
+          async: true
+        }
+      ]
+    });
+  </script>
+</body>
+
+</html>
